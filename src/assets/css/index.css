@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.favList {
+  border-color: transparent transparent #f9fafb transparent;
+}

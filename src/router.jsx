@@ -1,15 +1,18 @@
 import React from "react";
-import Header from "./components/Header";
-import { Routes, Route } from "react-router";
+import { useRoutes } from "react-router";
+
+//* Navbar
+import Navbar from "./components/Navbar";
+
+const routes = [];
 
 const Router = () => {
+  const element = useRoutes(routes);
   return (
-    <>
-      <Header />
-      <Routes>
-        <Route path='/' element={<div>Hlw fellow patners</div>}/>
-      </Routes>
-    </>
+    <div className="flex">
+      <Navbar />
+      <div>{element}</div>
+    </div>
   );
 };
 

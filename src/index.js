@@ -1,7 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
+
+// Stylesheets
 import "./assets/css/index.css";
+
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
