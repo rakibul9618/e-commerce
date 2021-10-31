@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { createRef, useContext, useEffect, useState } from "react";
 import Logo from "../assets/images/logo.gif";
 import profilePic from "../assets/images/k.jpg";
 import { Link } from "react-router-dom";
@@ -6,7 +6,7 @@ import { GoSearch } from "react-icons/go";
 import { FcLike } from "react-icons/fc";
 import Tooltip from "./Tooltip";
 import { breakpointContext } from "../providers/BreakpointProvider";
-import useOuterClick from "../hooks/useOuterClick";
+import { useHideTooltip } from "../hooks/useHideTooltip";
 
 const Navbar = () => {
   // context API
@@ -18,18 +18,15 @@ const Navbar = () => {
   const [tooltipOne, setTooltipOne] = useState(false);
   const [tooltipTwo, setTooltipTwo] = useState(false);
 
-  //custom Hooks
-  const inputRef = useOuterClick((e) => {
-    focus && setFocus(false);
-    outline && setOutline(false);
-  });
-  const tooltipRef = useOuterClick((e) => {
-    tooltipOne && setTooltipOne(false);
-  });
+  // Ref
+  const inputRef = createRef();
+  const whitelistRef = createRef();
+  const profileRef = createRef();
 
-  const tooltipNextRef = useOuterClick((e) => {
-    tooltipTwo && setTooltipTwo(false);
-  });
+  //custom Hooks
+  useHideTooltip(inputRef, setFocus);
+  useHideTooltip(whitelistRef, setTooltipOne);
+  useHideTooltip(profileRef, setTooltipTwo);
 
   // functions
   const handleFocus = () => {
@@ -43,18 +40,18 @@ const Navbar = () => {
 
   const handleWhiteList = () => {
     tooltipTwo && setTooltipTwo(false);
-    setTooltipOne(!tooltipOne);
+    setTooltipOne((e) => !e);
   };
 
   const handleProfile = () => {
     tooltipOne && setTooltipOne(false);
-    setTooltipTwo(!tooltipTwo);
+    setTooltipTwo((e) => !e);
   };
 
   // useEffect
   useEffect(() => {
     bp.smAndDown && outline ? setFocus(true) : setFocus(false);
-  }, [bp.smAndDown]);
+  }, [bp.smAndDown, outline]);
 
   return (
     <div className="flex-1">
@@ -105,7 +102,7 @@ const Navbar = () => {
                 10
               </span>
               <div className={tooltipOne ? "block" : "hidden"}>
-                <Tooltip tooltip={tooltipRef} one={true} />
+                <Tooltip tooltip={whitelistRef} one={true} />
               </div>
             </div>
             <div className="w-6 relative">
@@ -116,7 +113,7 @@ const Navbar = () => {
                 onClick={() => handleProfile()}
               />
               <div className={tooltipTwo ? "block" : "hidden"}>
-                <Tooltip tooltip={tooltipNextRef} one={false} />
+                <Tooltip tooltip={profileRef} one={false} />
               </div>
             </div>
           </div>
