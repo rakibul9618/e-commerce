@@ -1,32 +1,60 @@
-import React, { createRef, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Logo from "../assets/images/logo.gif";
 import profilePic from "../assets/images/k.jpg";
 import { Link } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 import { FcLike } from "react-icons/fc";
-import { CgProfile } from "react-icons/cg";
 import Tooltip from "./Tooltip";
-import { useHideTooltip } from "../hooks/useHideTooltip";
+import { breakpointContext } from "../providers/BreakpointProvider";
+import useOuterClick from "../hooks/useOuterClick";
 
 const Navbar = () => {
+  // context API
+  const { bp } = useContext(breakpointContext);
+
   // useState
   const [outline, setOutline] = useState(false);
   const [focus, setFocus] = useState(false);
   const [tooltipOne, setTooltipOne] = useState(false);
   const [tooltipTwo, setTooltipTwo] = useState(false);
 
-  // Ref
-  const input = createRef();
-  const tooltip = createRef();
-  const tooltipNext = createRef();
+  //custom Hooks
+  const inputRef = useOuterClick((e) => {
+    focus && setFocus(false);
+    outline && setOutline(false);
+  });
+  const tooltipRef = useOuterClick((e) => {
+    tooltipOne && setTooltipOne(false);
+  });
 
-  // Custom Hook
-  useHideTooltip(tooltip, setTooltipOne);
-  useHideTooltip(tooltipNext, setTooltipTwo);
+  const tooltipNextRef = useOuterClick((e) => {
+    tooltipTwo && setTooltipTwo(false);
+  });
 
+  // functions
+  const handleFocus = () => {
+    setOutline(true);
+  };
+  const handleSearchToggle = () => {
+    bp.smAndDown && setFocus(!focus);
+    setOutline(!outline);
+    inputRef.current.focus();
+  };
+
+  const handleWhiteList = () => {
+    tooltipTwo && setTooltipTwo(false);
+    setTooltipOne(!tooltipOne);
+  };
+
+  const handleProfile = () => {
+    tooltipOne && setTooltipOne(false);
+    setTooltipTwo(!tooltipTwo);
+  };
+
+  // useEffect
   useEffect(() => {
-    focus && input.current.focus();
-  }, [focus, input, tooltipOne]);
+    bp.smAndDown && outline ? setFocus(true) : setFocus(false);
+  }, [bp.smAndDown]);
 
   return (
     <div className="flex-1">
@@ -39,26 +67,27 @@ const Navbar = () => {
 
             <form
               onSubmit={(e) => e.preventDefault()}
-              className={`focus-within:bg-white text-gray-500 md:text-gray-300 focus-within:text-red-300 flex items-center rounded-md p-2 md:pr-7 shadow-md input-wrap ${
-                outline ? "ring-2 " : "ring-0 "
+              className={` flex items-center rounded-md p-2 md:pr-7 shadow-md input-wrap cursor-text ${
+                outline
+                  ? "ring-2 focus-within:bg-white focus-within:text-red-300 "
+                  : "ring-0 text-gray-500 bg-bl"
               }`}
             >
               <GoSearch
                 className="md:mr-3 text-2xl"
-                onClick={() => setFocus(!focus)}
+                onClick={() => handleSearchToggle()}
               />
               <input
                 type="text"
                 id="search"
                 placeholder="Search store"
-                className={`bg-bl focus:bg-white outline-none text-xl caret-red-600 input ${
+                className={`bg-bl focus:bg-white outline-none text-xl text-black caret-red-600 input absolute md:static ${
                   focus
-                    ? "block absolute -left-8 -bottom-18 py-3 pr-3 pl-10 rounded-lg"
-                    : "hidden md:block "
+                    ? "-left-8 -bottom-18 py-3 pr-3 pl-10 rounded-lg"
+                    : "-left-full md:block "
                 }`}
-                onFocus={() => setOutline(true)}
-                onBlur={() => setOutline(false)}
-                ref={input}
+                onFocus={() => handleFocus()}
+                ref={inputRef}
               />
             </form>
           </div>
@@ -67,26 +96,27 @@ const Navbar = () => {
               <FcLike
                 className="text-2xl md:mr-16 cursor-pointer"
                 title="Whitelist"
-                onClick={() => setTooltipOne(!tooltipOne)}
+                onClick={() => handleWhiteList()}
               />
               <span
                 className="px-2 absolute -top-3 left-70p md:left-20p bg-red-200 rounded-full cursor-pointer"
-                onClick={() => setTooltipOne(!tooltipOne)}
+                onClick={() => handleWhiteList()}
               >
                 10
               </span>
               <div className={tooltipOne ? "block" : "hidden"}>
-                <Tooltip tooltip={tooltip} one={true} />
+                <Tooltip tooltip={tooltipRef} one={true} />
               </div>
             </div>
-            <div className='w-6 relative'  onClick={() => setTooltipTwo(!tooltipTwo)}>
+            <div className="w-6 relative">
               <img
                 src={profilePic}
                 alt="profile"
                 className="w-full cursor-pointer mr-2 md:mr-16  rounded-full"
+                onClick={() => handleProfile()}
               />
               <div className={tooltipTwo ? "block" : "hidden"}>
-                <Tooltip tooltip={tooltipNext} one={false} />
+                <Tooltip tooltip={tooltipNextRef} one={false} />
               </div>
             </div>
           </div>

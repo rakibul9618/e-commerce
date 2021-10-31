@@ -4,15 +4,17 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 // Stylesheets
 import "./assets/css/index.css";
-
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import BreakpointProvider from "./providers/BreakpointProvider";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <BreakpointProvider>
+      <Router>
+        <App />
+      </Router>
+    </BreakpointProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

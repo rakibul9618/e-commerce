@@ -1,17 +1,19 @@
 import { useEffect } from "react";
 
-export const useHideTooltip = (ref, settTooltip) => {
+export const useHideTooltip = (ref, set) => {
   useEffect(() => {
     function handleClick(e) {
+      e.stopPropagation();
+      
       if (ref && ref.current) {
         const currentRef = ref.current;
         if (!currentRef.contains(e.target)) {
           // put your action here
-          settTooltip(false);
+          set(false);
         }
       }
     }
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
-  }, [ref, settTooltip]);
+  }, [ref, set]);
 };
