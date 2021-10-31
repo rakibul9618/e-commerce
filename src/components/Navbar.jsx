@@ -6,7 +6,6 @@ import { GoSearch } from "react-icons/go";
 import { FcLike } from "react-icons/fc";
 import Tooltip from "./Tooltip";
 import { breakpointContext } from "../providers/BreakpointProvider";
-import useOuterClick from "../hooks/useOuterClick";
 
 const Navbar = () => {
   // context API
@@ -17,19 +16,6 @@ const Navbar = () => {
   const [focus, setFocus] = useState(false);
   const [tooltipOne, setTooltipOne] = useState(false);
   const [tooltipTwo, setTooltipTwo] = useState(false);
-
-  //custom Hooks
-  const inputRef = useOuterClick((e) => {
-    focus && setFocus(false);
-    outline && setOutline(false);
-  });
-  const tooltipRef = useOuterClick((e) => {
-    tooltipOne && setTooltipOne(false);
-  });
-
-  const tooltipNextRef = useOuterClick((e) => {
-    tooltipTwo && setTooltipTwo(false);
-  });
 
   // functions
   const handleFocus = () => {
