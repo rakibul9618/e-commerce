@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const useHideTooltip = (ref, set) => {
+export const useHideTooltip = (ref, set, setOutline) => {
   useEffect(() => {
     function handleClick(e) {
       e.stopPropagation();
@@ -10,6 +10,7 @@ export const useHideTooltip = (ref, set) => {
         if (!currentRef.contains(e.target)) {
           // put your action here
           set(false);
+          setOutline && setOutline(false)
         }
       }
     }

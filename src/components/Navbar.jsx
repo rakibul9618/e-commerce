@@ -24,7 +24,7 @@ const Navbar = () => {
   const profileRef = createRef();
 
   //custom Hooks
-  useHideTooltip(inputRef, setFocus);
+  useHideTooltip(inputRef, setFocus, setOutline);
   useHideTooltip(whitelistRef, setTooltipOne);
   useHideTooltip(profileRef, setTooltipTwo);
 
@@ -41,11 +41,13 @@ const Navbar = () => {
   const handleWhiteList = () => {
     tooltipTwo && setTooltipTwo(false);
     setTooltipOne((e) => !e);
+    setOutline(false);
   };
 
   const handleProfile = () => {
     tooltipOne && setTooltipOne(false);
     setTooltipTwo((e) => !e);
+    setOutline(false);
   };
 
   // useEffect
